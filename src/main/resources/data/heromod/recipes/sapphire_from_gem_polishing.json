@@ -1,0 +1,12 @@
+{
+  "type": "heromod:gem_polishing",
+  "ingredients": [
+    {
+      "item": "heromod:raw_sapphire"
+    }
+  ],
+  "output": {
+    "count": 3,
+    "item": "heromod:sapphire"
+  }
+}

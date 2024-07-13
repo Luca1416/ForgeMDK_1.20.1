@@ -1,0 +1,15 @@
+// 1.20.1	2024-06-17T16:01:51.9297301	Block States: heromod
+e3418c75a121ed887081f678de132f2ed4f250d8 assets/heromod/blockstates/gem_polishing_station.json
+f279fe293b4a8d1a1e185180c4d1d72a09d157ff assets/heromod/blockstates/raw_sapphire_block.json
+68463f1cb6d81fa5235dbcf8100ab594b87c6022 assets/heromod/blockstates/sapphire_block.json
+9c3381542e939a28da4ca38908dbd0eb9daa7d9e assets/heromod/blockstates/sapphire_ore.json
+91182ff478468d9febf48a04cb7d1aa4e43417fa assets/heromod/blockstates/sound_block.json
+14dc2863c08c6b480f3f4b4d7984a96a23b3aa71 assets/heromod/models/block/raw_sapphire_block.json
+858dbf47c543d030f6e24f6ea3233cb0ce28bd45 assets/heromod/models/block/sapphire_block.json
+dab7f2bde82bb039a648fe4e729b6bd251facff0 assets/heromod/models/block/sapphire_ore.json
+aadcd14e1f5b1f40fa6861eec7a4bd3ab4815642 assets/heromod/models/block/sound_block.json
+dc6fd2497cded11c0d9cff4486d766aed05cbe4d assets/heromod/models/item/gem_polishing_station.json
+9f6a09c5e6c319b53d092bb3d5d41893dbdcb10e assets/heromod/models/item/raw_sapphire_block.json
+11d99142a8d492ece6c8c1b89c4f3e60f4190692 assets/heromod/models/item/sapphire_block.json
+4cd8f95788968efc2d6e88a029466ae87e624a28 assets/heromod/models/item/sapphire_ore.json
+91a11878055d69e41f7a827429f1c9bde5bd4804 assets/heromod/models/item/sound_block.json

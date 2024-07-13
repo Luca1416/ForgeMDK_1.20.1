@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "heromod:block/sound_block"
+    }
+  }
+}

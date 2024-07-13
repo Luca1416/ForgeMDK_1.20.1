@@ -1,0 +1,6 @@
+// 1.20.1	2024-06-17T16:01:51.930733	Tags for minecraft:block mod id heromod
+fa7e9004ac69286b67b680edc64aa585efc1bc27 data/forge/tags/blocks/needs_netherite_tool.json
+c2c86fd35a59a883332e345dc74ac4e415ae6683 data/minecraft/tags/blocks/mineable/pickaxe.json
+3d559ccba2938bbf5040e66f59b59cf6f1e4f3af data/minecraft/tags/blocks/needs_diamond_tool.json
+b98af1ffd2a9dd78b1372e92db0e4725e8ea1a39 data/minecraft/tags/blocks/needs_iron_tool.json
+35133e95f1c8fdd7a1c21afcc231fc0bffefb9a8 data/minecraft/tags/blocks/needs_stone_tool.json

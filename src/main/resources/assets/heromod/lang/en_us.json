@@ -1,0 +1,30 @@
+{
+  "item.heromod.sapphire": "Sapphire",
+  "item.heromod.raw_sapphire": "Raw Sapphire",
+  "item.heromod.strawberry": "Strawberry",
+  "item.heromod.test": "BeamBlast",
+  "item.heromod.reactor_test1": "Reactor Mark 47",
+
+  "block.heromod.sapphire_block": "Block of Sapphire",
+  "block.heromod.raw_sapphire_block": "Block of Raw Sapphire",
+  "block.heromod.sapphire_ore": "Sapphire Ore",
+  "block.heromod.gem_polishing_station": "Gem Station",
+  "block.heromod.sound_block": "Sound Block",
+
+  "item.heromod.ironman_helmet_mk47": "Ironman Helmet MK47",
+  "item.heromod.ironman_chestplate_mk47": "Ironman Chestplate MK47",
+  "item.heromod.ironman_leggings_mk47": "Ironman Leggings MK47",
+  "item.heromod.ironman_boots_mk47": "Ironman Boots MK47",
+
+  "entity.heromod.custom_small_fireball": "Custom Small Fireball",
+  "entity.heromod.sentry_entity": "Iron Man Sentry",
+
+
+  "tooltip.heromod.metal_detector.tooltip": "Finds valuables underground!",
+
+  "key.heromod.sentry_spawn": "Summon Sentry",
+  "key.categories.heromod": "Luero",
+
+
+  "creativetab.hero_mod": "Hero Mod"
+}

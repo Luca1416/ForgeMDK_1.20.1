@@ -1,0 +1,6 @@
+// 1.20.1	2024-06-17T16:00:50.1313752	Loot Tables
+ed798923672e6a80229d12a557d52404ca4ff62d data/heromod/loot_tables/blocks/gem_polishing_station.json
+0b64298f772c9fb2d55313c759ee4996d7cfb096 data/heromod/loot_tables/blocks/raw_sapphire_block.json
+639d9512373f509bfa0448283a0b2369fe29a5b4 data/heromod/loot_tables/blocks/sapphire_block.json
+9267a75dc123aecd4c17b75e746d0e9b611c727d data/heromod/loot_tables/blocks/sapphire_ore.json
+a84a4639a5e6ce4d3256dd7a129d90052f833472 data/heromod/loot_tables/blocks/sound_block.json
