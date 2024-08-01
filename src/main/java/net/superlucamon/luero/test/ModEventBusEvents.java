@@ -5,7 +5,7 @@ import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.superlucamon.luero.Main;
-import net.superlucamon.luero.client.IHeroCapability;
+import net.superlucamon.luero.server.IHeroCapability;
 import net.superlucamon.luero.entity.types.nonhostile.SentryEntity;
 
 @Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)

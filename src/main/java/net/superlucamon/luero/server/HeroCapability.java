@@ -1,7 +1,9 @@
-package net.superlucamon.luero.client;
+package net.superlucamon.luero.server;
 
 import net.minecraft.nbt.CompoundTag;
-import net.superlucamon.luero.client.CSHeroProvider.Hero;
+import net.superlucamon.luero.networking.ModPackets;
+import net.superlucamon.luero.networking.packet.RenderAbilitiesSyncS2Packet;
+import net.superlucamon.luero.server.HeroProvider.Hero;
 
 public class HeroCapability implements IHeroCapability {
     private Hero currentHero;

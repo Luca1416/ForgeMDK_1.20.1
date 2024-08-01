@@ -24,13 +24,14 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.superlucamon.luero.block.ModBlocks;
 import net.superlucamon.luero.block.entity.ModBlockEntities;
 import net.superlucamon.luero.block.recipe.ModRecipes;
-import net.superlucamon.luero.client.HeroRegistry;
+import net.superlucamon.luero.server.HeroRegistry;
 import net.superlucamon.luero.client.command.HeroCommand;
 import net.superlucamon.luero.entity.renderer.CustomLineRenderer;
 import net.superlucamon.luero.entity.renderer.SentryEntityRenderer;
 import net.superlucamon.luero.heros.ironman.abilities.SentryMode;
 import net.superlucamon.luero.item.ModCreativeModTabs;
 import net.superlucamon.luero.item.ModItems;
+import net.superlucamon.luero.networking.ModPackets;
 import net.superlucamon.luero.screen.GemPolishingStationScreen;
 import net.superlucamon.luero.screen.ModMenuTypes;
 import net.superlucamon.luero.test.CustomMissileRenderer;
@@ -45,9 +46,6 @@ public class Main
 {
     public static final String MOD_ID = "heromod";
     private static final Logger LOGGER = LogUtils.getLogger();
-
-
-
 
     public Main() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -79,7 +77,11 @@ public class Main
         HeroCommand.register(event.getDispatcher());
     }
     private void commonSetup(final FMLCommonSetupEvent event) {
-        HeroRegistry.initializeHeroes();
+        event.enqueueWork(() -> {
+            HeroRegistry.initializeHeroes();
+        });
+
+        ModPackets.register();
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {

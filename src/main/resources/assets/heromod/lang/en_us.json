@@ -22,7 +22,11 @@
 
   "tooltip.heromod.metal_detector.tooltip": "Finds valuables underground!",
 
-  "key.heromod.sentry_spawn": "Summon Sentry",
+  "key.heromod.abilitykey_1": "ABILITYKEY_1",
+  "key.heromod.abilitykey_2": "ABILITYKEY_2",
+  "key.heromod.abilitykey_3": "ABILITYKEY_3",
+  "key.heromod.abilitykey_4": "ABILITYKEY_4",
+
   "key.categories.heromod": "Luero",
 
 

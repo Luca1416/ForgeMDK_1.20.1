@@ -10,31 +10,38 @@ import org.lwjgl.glfw.GLFW;
 
 @Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class KeyBindings {
-    public static final KeyMapping UNIVERSEL_RIGHTCLICK = new KeyMapping(
+    public static final KeyMapping RIGHTCLICK = new KeyMapping(
             "key.heromod.universel_rightclick",
             InputConstants.Type.MOUSE,
-            GLFW.GLFW_KEY_G,
-            null
+            GLFW.GLFW_MOUSE_BUTTON_2,
+            "key.categories.heromod"
 
     );
     public static final KeyMapping ABILITYKEY_1 = new KeyMapping(
             "key.heromod.abilitykey_1",
             InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_V,
+            GLFW.GLFW_KEY_R,
             "key.categories.heromod"
 
     );
     public static final KeyMapping ABILITYKEY_2 = new KeyMapping(
-            "key.heromod.callback_sentry",
+            "key.heromod.abilitykey_2",
             InputConstants.Type.KEYSYM,
-            GLFW.GLFW_KEY_LEFT_SHIFT & GLFW.GLFW_KEY_RIGHT_SHIFT,
+            GLFW.GLFW_KEY_F,
             "key.categories.heromod"
     );
 
     public static final KeyMapping ABILITYKEY_3 = new KeyMapping(
-            "key.heromod.sentry_spawn",
+            "key.heromod.abilitykey_3",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_G,
+            "key.categories.heromod"
+
+    );
+    public static final KeyMapping ABILITYKEY_4 = new KeyMapping(
+            "key.heromod.abilitykey_4",
+            InputConstants.Type.KEYSYM,
+            GLFW.GLFW_KEY_V,
             "key.categories.heromod"
 
     );
@@ -48,7 +55,11 @@ public class KeyBindings {
 
     @SubscribeEvent
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
-        event.register(ABILITYKEY_3);
+        event.register(RIGHTCLICK);
+        event.register(UNIVSERAL_TEST);
+        event.register(ABILITYKEY_1);
         event.register(ABILITYKEY_2);
+        event.register(ABILITYKEY_3);
+        event.register(ABILITYKEY_4);
     }
 }

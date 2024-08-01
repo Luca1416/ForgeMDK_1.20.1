@@ -26,9 +26,8 @@ public class SentryMode {
 
 
     public static void spawnSentry(ServerPlayer player) {
-        mSentry = new SentryEntity(SENTRY_ENTITY.get(), player.level());//(SentryEntity) CustomEntityRegister.SENTRY_ENTITY.get().create(player.level());
+        mSentry = new SentryEntity(SENTRY_ENTITY.get(), player.level());
         Vec3 spawnPosition = player.position();
-       // sentry.setPlayer(player);
         mSentry.setPos(spawnPosition.x, spawnPosition.y- 1, spawnPosition.z);
         player.level().addFreshEntity(mSentry);
         mPlayer = player;
@@ -99,7 +98,6 @@ public class SentryMode {
                 mSentry.getNavigation().moveTo(path, speed);
                 if (mSentry.distanceTo(mPlayer) < 5){
                     speed = 1f;
-                    // EntityGoalUtils.clearGoals(mSentry);
                 }
                 else speed = 2f;
                 if (mSentry.distanceTo(mPlayer) < 2){
@@ -112,7 +110,6 @@ public class SentryMode {
                     callback = false;
                     mSentry.isReturing = false;
                     System.out.println(mSentry.readyForTransform);
-                   // EntityGoalUtils.clearGoals(mSentry);
                 }
             }
         }

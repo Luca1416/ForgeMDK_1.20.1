@@ -22,6 +22,7 @@ public class IronmanMark1TestArmorItem extends ArmorItem implements GeoItem {
 
     public IronmanMark1TestArmorItem(ArmorMaterial material, Type type, Properties properties) {
         super(material, type, properties);
+
     }
 
     @Override

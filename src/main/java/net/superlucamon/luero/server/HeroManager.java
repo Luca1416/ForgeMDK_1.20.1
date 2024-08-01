@@ -1,9 +1,9 @@
-package net.superlucamon.luero.client;
+package net.superlucamon.luero.server;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
-import net.superlucamon.luero.client.CSHeroProvider.Ability;
-import net.superlucamon.luero.client.CSHeroProvider.Hero;
+import net.superlucamon.luero.server.HeroProvider.Ability;
+import net.superlucamon.luero.server.HeroProvider.Hero;
 
 public class HeroManager {
     public static void setPlayerHero(Player player, Hero hero) {
@@ -16,6 +16,7 @@ public class HeroManager {
         IHeroCapability cap = player.getCapability(HeroCapabilityProvider.HERO_CAPABILITY).orElse(null);
         return cap != null ? cap.getCurrentHero() : null;
     }
+
 
     public static void updatePlayerAbilities(Player player, Hero hero) {
         player.sendSystemMessage(Component.literal("You are " + hero.getName() + " with abilities:"));
