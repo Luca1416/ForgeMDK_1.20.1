@@ -24,17 +24,19 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.superlucamon.luero.block.ModBlocks;
 import net.superlucamon.luero.block.entity.ModBlockEntities;
 import net.superlucamon.luero.block.recipe.ModRecipes;
-import net.superlucamon.luero.server.HeroRegistry;
 import net.superlucamon.luero.client.command.HeroCommand;
 import net.superlucamon.luero.entity.renderer.CustomLineRenderer;
 import net.superlucamon.luero.entity.renderer.SentryEntityRenderer;
+import net.superlucamon.luero.entity.renderer.UniBeamRenderer;
 import net.superlucamon.luero.heros.ironman.abilities.SentryMode;
 import net.superlucamon.luero.item.ModCreativeModTabs;
 import net.superlucamon.luero.item.ModItems;
 import net.superlucamon.luero.networking.ModPackets;
+import net.superlucamon.luero.register.ModSounds;
 import net.superlucamon.luero.screen.GemPolishingStationScreen;
 import net.superlucamon.luero.screen.ModMenuTypes;
-import net.superlucamon.luero.test.CustomMissileRenderer;
+import net.superlucamon.luero.server.HeroRegistry;
+import net.superlucamon.luero.test.RenderMicromissile;
 import net.superlucamon.luero.test.TargetMarkerEntityRenderer;
 import org.slf4j.Logger;
 import software.bernie.geckolib.GeckoLib;
@@ -52,6 +54,7 @@ public class Main
         modEventBus.addListener(this::commonSetup);
         ModBlocks.register(modEventBus);
         ModItems.register(modEventBus);
+        ModSounds.register(modEventBus);
 
         ModRecipes.register(modEventBus);
         ModCreativeModTabs.register(modEventBus);
@@ -80,7 +83,6 @@ public class Main
         event.enqueueWork(() -> {
             HeroRegistry.initializeHeroes();
         });
-
         ModPackets.register();
     }
 
@@ -98,10 +100,12 @@ public class Main
         @SubscribeEvent
         public static void registerRenderers(final FMLClientSetupEvent event) {
             event.enqueueWork(() -> {
-                EntityRenderers.register(CUSTOM_SMALL_FIREBALL.get(), CustomMissileRenderer::new);
+                //EntityRenderers.register(CUSTOM_SMALL_FIREBALL.get(), CustomMissileRenderer::new);
                 EntityRenderers.register(TARGET_MARKER.get(), TargetMarkerEntityRenderer::new);
                 EntityRenderers.register(CUSTOM_LINE.get(), CustomLineRenderer::new);
+                EntityRenderers.register(CUSTOM_BEAM.get(), UniBeamRenderer::new);
                 EntityRenderers.register(SENTRY_ENTITY.get(), SentryEntityRenderer::new);
+                EntityRenderers.register(CUSTOM_SMALL_FIREBALL.get(), RenderMicromissile::new);
              //  EntityRendererProvider.Context context = Minecraft.getInstance().getEntityRenderDispatcher().();
              //  boolean useSmallArms = false; // Change this if you want small arms model
              //  Minecraft.getInstance().getEntityRenderDispatcher().getSkinMap().put("default", new CustomLineRenderer(context, useSmallArms));

@@ -1,6 +1,7 @@
 package net.superlucamon.luero.test;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -28,7 +29,20 @@ public class CustomMissileRenderer extends MobRenderer<CustomFlyingRocket, Custo
     public void render(CustomFlyingRocket entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight) {
         float scale = 1F;
             matrixStack.scale(scale, scale, scale);
-          //  matrixStack.mulPose(Axis.ZP.rotationDegrees(entity.tickCount * Mth.PI * 2.0F));
+            //matrixStack.mulPose(Axis.XP.rotationDegrees(entity.tickCount * Mth.PI * 2.0F))
+        //matrixStack.mulPose(Axis.XP.rotationDegrees(entity.getTargetYaw()));
+        //matrixStack.mulPose(Axis.YP.rotationDegrees(entity.getTargetPitch()));
+        float targetYaw = entity.getTargetYaw();   // Horizontal rotation
+        float targetPitch = entity.getTargetPitch(); // Vertical rotation
+        System.out.println("Target Yaw: " + targetYaw);
+        System.out.println("Target Pitch: " + targetPitch);
+
+        // Yaw: rotate around Y-axis
+        matrixStack.mulPose(Axis.YP.rotationDegrees(targetYaw));
+
+// Pitch: rotate around the X-axis to tilt up/down
+        matrixStack.mulPose(Axis.XP.rotationDegrees(targetPitch));
+
         super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
     }
 

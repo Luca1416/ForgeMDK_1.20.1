@@ -23,6 +23,7 @@ public class ModCreativeModTabs {
                         pOutput.accept(ModItems.RAW_SAPPHIRE.get());
                         pOutput.accept(ModItems.BEAMITEM_TEST.get());
                         pOutput.accept(ModItems.REACTOR_TEST1.get());
+                        pOutput.accept(ModItems.UNIBEAMITEM_TEST.get());
 
 
                         pOutput.accept(Items.DIAMOND);

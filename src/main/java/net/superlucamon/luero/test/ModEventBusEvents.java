@@ -5,8 +5,8 @@ import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.superlucamon.luero.Main;
-import net.superlucamon.luero.server.IHeroCapability;
 import net.superlucamon.luero.entity.types.nonhostile.SentryEntity;
+import net.superlucamon.luero.server.IHeroCapability;
 
 @Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEventBusEvents {
@@ -14,6 +14,7 @@ public class ModEventBusEvents {
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(CustomEntityRegister.CUSTOM_SMALL_FIREBALL.get(), CustomFlyingRocket.createMissileAttributes().build());
         event.put(CustomEntityRegister.CUSTOM_LINE.get(), BeamEntity.createSentryAttributes().build());
+        //event.put(CustomEntityRegister.CUSTOM_BEAM.get(), UniBeamEntity.().build());
         event.put(CustomEntityRegister.SENTRY_ENTITY.get(), SentryEntity.createSentryAttributes().build());
     }
     @SubscribeEvent

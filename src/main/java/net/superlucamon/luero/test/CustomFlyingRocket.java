@@ -4,6 +4,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -13,8 +16,6 @@ import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -23,12 +24,14 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.superlucamon.luero.block.ModTags;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
 public class CustomFlyingRocket extends FlyingMob {
-
+    private static final EntityDataAccessor<Float> TARGET_YAW =
+            SynchedEntityData.defineId(CustomFlyingRocket.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> TARGET_PITCH =
+            SynchedEntityData.defineId(CustomFlyingRocket.class, EntityDataSerializers.FLOAT);
     private Player owner;
     private LivingEntity targetEntity;
     private Vec3 targetPos;
@@ -37,7 +40,7 @@ public class CustomFlyingRocket extends FlyingMob {
     private Vec3 motion;
     private BlockPos blockPosEntity;
     private int cooldown = 60;
-    private PathNavigation navi = createNavigation(level());
+    private float targetYaw;
 
     public CustomFlyingRocket(EntityType<? extends FlyingMob> entityType, Level world) {
         super(entityType, world);
@@ -58,26 +61,49 @@ public class CustomFlyingRocket extends FlyingMob {
     public static AttributeSupplier.Builder createMissileAttributes() {
         return Mob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 10)
-                .add(Attributes.MOVEMENT_SPEED, 0.6)
-                .add(Attributes.FLYING_SPEED, 0.6);
+                .add(Attributes.MOVEMENT_SPEED, 0.02)
+                .add(Attributes.FLYING_SPEED, 0.02);
 
     }
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(TARGET_YAW, 0.0f);
+        this.entityData.define(TARGET_PITCH, 0.0f);
+    }
+
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new FollowTargetGoal(this, 0.6));
+        this.goalSelector.addGoal(0, new FollowTargetGoal(this, 0.02));
     }
 
     private boolean canHit(Entity entity) {
         return true;
     }
+    public float getTargetYaw() {
+        return this.entityData.get(TARGET_YAW);
+    }
+
+    public void setTargetYaw(float yaw) {
+        this.entityData.set(TARGET_YAW, yaw);
+    }
+
+    public float getTargetPitch() {
+        return this.entityData.get(TARGET_PITCH);
+    }
+
+    public void setTargetPitch(float pitch) {
+        this.entityData.set(TARGET_PITCH, pitch);
+    }
+
     @Override
     public void tick() {
         super.tick();
         if (!this.level().isClientSide) {
-           HitResult hitResult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHit);
+            HitResult hitResult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHit);
             if (hitResult.getType() != HitResult.Type.MISS) {
-               this.onCollision(hitResult);
+                this.onCollision(hitResult);
             }
             if (isFlyingMobTouchingBlock(this) && this.tickCount >= cooldown) {
                 this.explodeAndDiscard();
@@ -97,17 +123,18 @@ public class CustomFlyingRocket extends FlyingMob {
                 this.getX(),
                 this.getY(),
                 this.getZ(),
-                getRandom().nextIntBetweenInclusive(1,2),
+                getRandom().nextIntBetweenInclusive(1, 2),
                 Level.ExplosionInteraction.MOB
         );
         this.discard();
     }
+
     public static boolean isFlyingMobTouchingBlock(Mob mob) {
         AABB boundingBox = mob.getBoundingBox();
 
         for (BlockPos pos : BlockPos.betweenClosed(
-                new BlockPos((int)boundingBox.minX,(int) boundingBox.minY,(int) boundingBox.minZ),
-                new BlockPos((int)boundingBox.maxX,(int)boundingBox.maxY,(int) boundingBox.maxZ))) {
+                new BlockPos((int) boundingBox.minX, (int) boundingBox.minY, (int) boundingBox.minZ),
+                new BlockPos((int) boundingBox.maxX, (int) boundingBox.maxY, (int) boundingBox.maxZ))) {
 
             BlockState blockState = mob.level().getBlockState(pos);
 
@@ -122,12 +149,6 @@ public class CustomFlyingRocket extends FlyingMob {
         if (hitResult instanceof EntityHitResult && ((EntityHitResult) hitResult).getEntity() != owner && ((EntityHitResult) hitResult).getEntity() instanceof LivingEntity && ((EntityHitResult) hitResult).getEntity() != this) {
             explodeAndDiscard();
         }
-    }
-
-    @Nullable
-    @Override
-    public Entity getControlledVehicle() {
-        return super.getControlledVehicle();
     }
 
     @Override
@@ -163,21 +184,11 @@ public class CustomFlyingRocket extends FlyingMob {
         return true;
     }
 
-    public ItemStack getStack() {
-        return new ItemStack(Items.FIREWORK_ROCKET);
-    }
-
-    @Override
-    public void baseTick() {
-        if (getTarget() != null) {
-           // this.goalSelector.tick();
-        }
-    }
 
     @Override
     public void checkDespawn() {
         if (!this.isAlive() || targetEntity == null) {
-               this.discard();
+            this.discard();
         }
     }
 
@@ -186,12 +197,15 @@ public class CustomFlyingRocket extends FlyingMob {
         private final double speed;
         private LivingEntity target;
         private int delay;
+        private float roll = 0.0f;
+
 
         public FollowTargetGoal(CustomFlyingRocket missile, double speed) {
             this.missile = missile;
             this.speed = speed;
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
+
         @Override
         public boolean canUse() {
             target = this.missile.getTarget();
@@ -204,71 +218,66 @@ public class CustomFlyingRocket extends FlyingMob {
         }
 
         @Override
-        public void start() {
-            this.delay = 0;
-        }
-
-        @Override
-        public void stop() {
-            this.target = null;
-        }
-
-        @Override
         public void tick() {
             if (target != null) {
-
-                // System.out.println(target + " - " + missile);
                 blockPosEntity = target.blockPosition();
-                targetPos = target.getEyePosition();
-                missilePos = missile.position();
-                direction = targetPos.subtract(missilePos).normalize();
-                motion = direction.scale(speed);
-                missile.lerpMotion(motion.x, motion.y, motion.z);
-                missile.noPhysics = true;
+                Vec3 targetPos = target.getEyePosition();
+                Vec3 missilePos = missile.position();
+                Vec3 direction = targetPos.subtract(missilePos).normalize();
+                Vec3 motion = direction.scale(speed);
 
-                missile.lookAt(targetEntity, 5f, 5f);
+                missile.setDeltaMovement(motion);
+                //updateRotation(direction);
+                //missile.lookAt(target, 30.0F, 30.0F);
+                float dX = (float) target.getX() -   (float) missile.getX();
+                float dY =  (float) target.getY() -  (float)missile.getY();
+                float dZ =  (float)target.getZ() -  (float)missile.getZ();
+                float yaw =  (float) Math.atan2(dZ, dX);
+                // Calculate pitch (rotation around X-axis)
+                float pitch = (float) Math.atan2(Math.sqrt(dZ * dZ + dX * dX), dY) + (float) Math.PI;
 
-                //missile.getLookControl().setLookAt(missile, 30, 30);
-                //missile.getLookControl().setLookAt(target, 30, 30);
-                //missile.lookAt(target, 5, 5);
-                //missile.setXRot(-185f);
-                //missile.setYRot(-180f);
 
-/*
-                Vec3 velocity = missile.getDeltaMovement(); // Get the entity's velocity vector
-                Vec3 direction = velocity.normalize();
-                double dx = direction.x;
-                double dz = direction.z;
-                float yaw = (float) (Math.atan2(dz, dx) * (180 / Math.PI)) - 90; // Convert to degrees
-                double dy = direction.y;
-                float distance = (float) Math.sqrt(dx * dx + dz * dz);
-                float pitch = (float) -(Math.atan2(dy, distance) * (180 / Math.PI)); // Convert to degrees
-                missile.setYRot(yaw);
-                missile.setXRot(pitch);
-*/
+                // Save these values so that the renderer can access them on the client side
+                missile.setTargetYaw(yaw);
+                missile.setTargetPitch(pitch);
 
-                missile.hasImpulse = true;
-                missile.markHurt();
-            }
-            else {
+
+
+            } else {
                 missile.setPos(blockPosEntity.getX(), blockPosEntity.getY(), blockPosEntity.getZ());
             }
+
+        }
+        private void updateRotation(Vec3 direction) {
+            // Calculate yaw (horizontal angle)
+            float yaw = (float) (Math.atan2(direction.z, direction.x) * (180 / Math.PI)) - 90;
+
+            // Calculate pitch (vertical angle)
+            float pitch = (float) -(Math.atan2(direction.y, Math.sqrt(direction.x * direction.x + direction.z * direction.z)) * (180 / Math.PI));
+
+            // Apply rotations — yaw controls facing direction, pitch controls tilt
+            missile.setYRot(lerpRotation(missile.getYRot(), yaw, 0.2f));
+            missile.setXRot(lerpRotation(missile.getXRot(), pitch, 0.2f));
+
+            // Ensure rotations are correctly updated
+            missile.setRot(missile.getYRot(), missile.getXRot());
+
+            // Save previous rotations (for smooth interpolation)
+            missile.yHeadRot = missile.getYRot();
+            missile.xRotO = missile.getXRot();
         }
 
-        @Override
-        protected int adjustedTickDelay(int pAdjustment) {
-            pAdjustment *= 0.1F;
-            return super.adjustedTickDelay(pAdjustment);
+
+
+        private float lerpRotation(float current, float target, float factor) {
+            float delta = target - current;
+            delta = (delta + 180) % 360 - 180; // Ensure shortest path for angles
+            return current + delta * factor;
         }
 
-        @Override
-        public boolean isInterruptable() {
-            return false;
-        }
 
-        @Override
-        public boolean requiresUpdateEveryTick() {
-            return true;
-        }
+
     }
+
 }
+

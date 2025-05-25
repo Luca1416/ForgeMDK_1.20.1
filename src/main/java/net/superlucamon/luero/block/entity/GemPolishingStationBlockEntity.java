@@ -2,11 +2,13 @@ package net.superlucamon.luero.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -32,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public class GemPolishingStationBlockEntity extends BlockEntity implements MenuProvider {
-    private final ItemStackHandler itemHandler = new ItemStackHandler(2) {
+    private final ItemStackHandler itemHandler = new ItemStackHandler(3) {
         @Override
         protected void onContentsChanged(int slot) {
             setChanged();
@@ -43,6 +45,7 @@ public class GemPolishingStationBlockEntity extends BlockEntity implements MenuP
     };
 
     private static final int INPUT_SLOT = 0;
+    private static final int Fuel_SLOT = 2;
     private static final int OUTPUT_SLOT = 1;
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
@@ -70,7 +73,6 @@ public class GemPolishingStationBlockEntity extends BlockEntity implements MenuP
                     case 1 -> GemPolishingStationBlockEntity.this.maxProgress = pValue;
                 }
             }
-
             @Override
             public int getCount() {
                 return 2;
@@ -120,6 +122,15 @@ public class GemPolishingStationBlockEntity extends BlockEntity implements MenuP
         return Component.translatable("block.heromod.gem_polishing_station");
     }
 
+    public int getProgress() {
+        return this.progress;
+    }
+
+    public int getMaxProgress() {
+        return this.maxProgress;
+    }
+
+
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
@@ -142,15 +153,26 @@ public class GemPolishingStationBlockEntity extends BlockEntity implements MenuP
     }
 
     public void tick(Level pLevel, BlockPos pPos, BlockState pState) {
-        if(hasRecipe()) {
+        if (hasRecipe()) {
+            //System.out.println("[TICK DEBUG] Progress: " + progress + "/" + maxProgress);
             increaseCraftingProgress();
             setChanged(pLevel, pPos, pState);
 
-            if(hasProgressFinished()) {
+            // ✨ Add particles occasionally
+            if (!pLevel.isClientSide && pLevel.getGameTime() % 10 == 0) {
+                ((ServerLevel) pLevel).sendParticles(
+                        ParticleTypes.LAVA, // 🔄 Change this to your preferred type
+                        pPos.getX() + 0.5, pPos.getY() + 1.0, pPos.getZ() + 0.5,
+                        5, 0.2, 0.2, 0.2, 0.01
+                );
+            }
+
+            if (hasProgressFinished()) {
                 craftItem();
                 resetProgress();
             }
-        } else {
+        }
+        else {
             resetProgress();
         }
     }
@@ -160,13 +182,28 @@ public class GemPolishingStationBlockEntity extends BlockEntity implements MenuP
     }
 
     private void craftItem() {
-        Optional<GemPolishingRecipe> recipe = getCurrentRecipe();
-        ItemStack result = recipe.get().getResultItem(null);
+        Optional<GemPolishingRecipe> recipeOpt = getCurrentRecipe();
+        if (recipeOpt.isEmpty()) return;
 
-        this.itemHandler.extractItem(INPUT_SLOT, 1, false);
+        GemPolishingRecipe recipe = recipeOpt.get();
+        ItemStack result = recipe.getResultItem(null).copy();
 
-        this.itemHandler.setStackInSlot(OUTPUT_SLOT, new ItemStack(result.getItem(),
-                this.itemHandler.getStackInSlot(OUTPUT_SLOT).getCount() + result.getCount()));
+// 🛠 Consume ingredients according to their counts
+        for (int i = 0; i < recipe.getIngredients().size(); i++) {
+            int slot = i == 0 ? INPUT_SLOT : Fuel_SLOT; // or however your slots map
+            int count = recipe.getCounts().get(i);
+            this.itemHandler.extractItem(slot, count, false);
+        }
+
+// 🧪 Add result
+        ItemStack outputStack = this.itemHandler.getStackInSlot(OUTPUT_SLOT);
+        if (outputStack.isEmpty()) {
+            this.itemHandler.setStackInSlot(OUTPUT_SLOT, result);
+        } else if (ItemStack.isSameItemSameTags(outputStack, result)) {
+            outputStack.grow(result.getCount());
+            this.itemHandler.setStackInSlot(OUTPUT_SLOT, outputStack);
+        }
+
     }
 
     private boolean hasRecipe() {

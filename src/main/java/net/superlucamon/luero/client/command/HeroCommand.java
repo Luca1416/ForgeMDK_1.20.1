@@ -30,6 +30,21 @@ public class HeroCommand {
                                 return 0;
                             }
                         })));
+        dispatcher.register(Commands.literal("setHeroNull")
+                        .executes(context -> {
+                            ServerPlayer player = context.getSource().getPlayerOrException();
+                            Hero hero = HeroManager.getPlayerHero(player);
+                            if (hero != null) {
+                                ModPackets.sendToPlayer(new RenderAbilitiesSyncS2Packet("null"), player);
+                                HeroManager.setPlayerHero(player, null);
+                                context.getSource().sendSuccess(() -> Component.literal("Hero removed"), true);
+                                return 1;
+                            } else {
+                                context.getSource().sendFailure(Component.literal("Could not remove hero Because you are not a Hero"));
+                                return 0;
+                            }
+                        }));
+
         dispatcher.register(Commands.literal("getHero")
                         .executes(context -> {
                             ServerPlayer player = context.getSource().getPlayerOrException();

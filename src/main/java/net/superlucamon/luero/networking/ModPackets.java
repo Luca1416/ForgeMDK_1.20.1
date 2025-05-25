@@ -7,6 +7,7 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.superlucamon.luero.Main;
+import net.superlucamon.luero.heros.keymanagement.AbilityKeyPressPacket;
 import net.superlucamon.luero.networking.packet.ExampleC2SPacket;
 import net.superlucamon.luero.networking.packet.RenderAbilitiesSyncS2Packet;
 
@@ -40,6 +41,11 @@ public class ModPackets {
                 .encoder(RenderAbilitiesSyncS2Packet::toBytes)
                 .consumerMainThread(RenderAbilitiesSyncS2Packet::handle)
                 .add();
+        net.registerMessage(packetId++,
+                AbilityKeyPressPacket.class,
+                AbilityKeyPressPacket::encode,
+                AbilityKeyPressPacket::decode,
+                AbilityKeyPressPacket::handle);
     }
 
     public static <MSG> void sendToServer(MSG message) {

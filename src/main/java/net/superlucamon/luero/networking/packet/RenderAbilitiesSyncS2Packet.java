@@ -23,7 +23,12 @@ public class RenderAbilitiesSyncS2Packet {
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
         context.enqueueWork(() -> {
-            ClientHeroData.set(hero);
+            if (hero.toLowerCase() == "null") {
+                ClientHeroData.set(null);
+            }
+            else {
+                ClientHeroData.set(hero);
+            }
         });
         return true;
     }

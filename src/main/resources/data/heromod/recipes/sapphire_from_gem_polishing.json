@@ -1,12 +1,11 @@
 {
   "type": "heromod:gem_polishing",
   "ingredients": [
-    {
-      "item": "heromod:raw_sapphire"
-    }
+    { "item": "heromod:raw_sapphire", "count": 15 },
+    { "item": "minecraft:iron_ingot", "count": 64 }
   ],
   "output": {
-    "count": 3,
-    "item": "heromod:sapphire"
+    "count": 1,
+    "item": "heromod:ironman_chestplate_mk47"
   }
 }

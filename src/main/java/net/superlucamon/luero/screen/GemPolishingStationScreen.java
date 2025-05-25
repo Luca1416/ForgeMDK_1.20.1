@@ -12,7 +12,7 @@ import net.superlucamon.luero.Main;
 
 public class GemPolishingStationScreen extends AbstractContainerScreen<GemPolishingStationMenu> {
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation(Main.MOD_ID, "textures/gui/gem_polishing_station_gui.png");
+            new ResourceLocation(Main.MOD_ID, "textures/gui/gem_polishing_station_guiv2.png");
 
     public GemPolishingStationScreen(GemPolishingStationMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -40,7 +40,7 @@ public class GemPolishingStationScreen extends AbstractContainerScreen<GemPolish
 
     private void renderProgressArrow(GuiGraphics guiGraphics, int x, int y) {
         if(menu.isCrafting()) {
-            guiGraphics.blit(TEXTURE, x + 85, y + 30, 176, 0, 8, menu.getScaledProgress());
+            guiGraphics.blit(TEXTURE, x + 85, y + 30, 176, 0, 26, menu.getScaledProgress());
         }
     }
 

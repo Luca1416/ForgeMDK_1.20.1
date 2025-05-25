@@ -6,18 +6,20 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.superlucamon.luero.Main;
+import net.superlucamon.luero.entity.projectile.MicromissileEntity;
+import net.superlucamon.luero.entity.projectile.UniBeamEntity;
 import net.superlucamon.luero.entity.types.nonhostile.SentryEntity;
 
 public abstract class CustomEntityRegister{
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Main.MOD_ID);
 
    public static final RegistryObject<EntityType> CUSTOM_SMALL_FIREBALL = ENTITY_TYPES.register("custom_small_fireball",
-            () -> EntityType.Builder.<CustomFlyingRocket>of(CustomFlyingRocket::new, MobCategory.MISC)
+            () -> EntityType.Builder.<MicromissileEntity>of(MicromissileEntity::new, MobCategory.MISC)
                     .sized(0.45F, 0.12F)
                     .setShouldReceiveVelocityUpdates(true)
                     .setTrackingRange(128)
                     .clientTrackingRange(4)
-                    .updateInterval(10)
+                    .updateInterval(1)
                     .build("custom_small_fireball"));
     public static final RegistryObject<EntityType> CUSTOM_LINE = ENTITY_TYPES.register("custom_line",
             () -> EntityType.Builder.<BeamEntity>of(BeamEntity::new, MobCategory.MISC)
@@ -26,6 +28,14 @@ public abstract class CustomEntityRegister{
                     .setTrackingRange(128)
                     .clientTrackingRange(4)
             .build("custom_line"));
+    public static final RegistryObject<EntityType> CUSTOM_BEAM = ENTITY_TYPES.register("custom_beam",
+            () -> EntityType.Builder.<UniBeamEntity>of(UniBeamEntity::new, MobCategory.MISC)
+                    .sized(0.2F, 0.2F)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .setTrackingRange(256)
+                    .updateInterval(1)
+                    .clientTrackingRange(20)
+                    .build("custom_beam"));
     public static final RegistryObject<EntityType> SENTRY_ENTITY = ENTITY_TYPES.register("sentry_entity",
             () -> EntityType.Builder.<SentryEntity>of(SentryEntity::new, MobCategory.MONSTER)
                     .sized(0.6F, 1.95F)

@@ -22,6 +22,10 @@ public class ReactorTest extends Item {
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
+       // Hero hero = HeroRegistry.getHeroByName("IronMan");
+       // ClientHeroData.set("IronMan");
+        //HeroManager.setPlayerHero(player, hero);
+       // HeroManager.updatePlayerAbilities(player, hero);
         if (player.getItemBySlot(EquipmentSlot.HEAD) == ItemStack.EMPTY) {
             player.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ModItems.IRONMAN_HELMET_MK47.get()));
         }

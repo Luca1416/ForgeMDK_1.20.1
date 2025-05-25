@@ -1,0 +1,12 @@
+{
+  "uni_beam": {
+    "category": "players",
+    "subtitle": "hero.unibeam",
+    "sounds": [
+      {
+        "name": "heromod:uni_beam",
+        "stream": true
+      }
+    ]
+  }
+}

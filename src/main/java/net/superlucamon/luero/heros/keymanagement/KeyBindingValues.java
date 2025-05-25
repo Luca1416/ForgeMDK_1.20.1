@@ -1,16 +1,33 @@
 package net.superlucamon.luero.heros.keymanagement;
 
-public enum KeyBindingValues {
-    ABILITYKEY_1(KeyBindings.ABILITYKEY_1.getKey().getDisplayName().getString()),
-    ABILITYKEY_2(KeyBindings.ABILITYKEY_2.getKey().getDisplayName().getString()),
-    ABILITYKEY_3(KeyBindings.ABILITYKEY_3.getKey().getDisplayName().getString()),
-    ABILITYKEY_4(KeyBindings.ABILITYKEY_4.getKey().getDisplayName().getString());
-    private final String value;
+import net.minecraft.client.KeyMapping;
+import net.minecraftforge.client.settings.KeyModifier;
 
-    KeyBindingValues(String translationKey) {
-        this.value = translationKey;
+public enum KeyBindingValues {
+    ABILITYKEY_1(KeyBindings.ABILITYKEY_1),
+    ABILITYKEY_2(KeyBindings.ABILITYKEY_2),
+    ABILITYKEY_3(KeyBindings.ABILITYKEY_3),
+    ABILITYKEY_4(KeyBindings.ABILITYKEY_4);
+
+    private final KeyMapping keyMapping;
+
+    KeyBindingValues(KeyMapping keyMapping) {
+        this.keyMapping = keyMapping;
     }
-    public String getTranslationKey() {
-        return value;
+
+    public String getFormattedKey() {
+        StringBuilder sb = new StringBuilder();
+
+        KeyModifier modifier = keyMapping.getKeyModifier();
+        if (modifier != KeyModifier.NONE) {
+            sb.append(modifier.name()).append(" + ");
+        }
+
+        sb.append(keyMapping.getKey().getDisplayName().getString());
+        return sb.toString();
+    }
+
+    public KeyMapping getKeyMapping() {
+        return keyMapping;
     }
 }

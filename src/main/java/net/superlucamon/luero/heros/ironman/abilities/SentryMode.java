@@ -11,6 +11,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.superlucamon.luero.entity.types.nonhostile.SentryEntity;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import static net.superlucamon.luero.test.CustomEntityRegister.SENTRY_ENTITY;
 
 @Mod.EventBusSubscriber(modid = "heromod", bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -23,6 +27,11 @@ public class SentryMode {
     private static final int cd = 2;
     private static int ticksSinceArrival;
     private static int test;
+    private static final Map<UUID, SentryEntity> activeSentries = new HashMap<>();
+
+    public static boolean hasSentry(ServerPlayer player) {
+        return activeSentries.containsKey(player.getUUID());
+    }
 
 
     public static void spawnSentry(ServerPlayer player) {
@@ -31,8 +40,14 @@ public class SentryMode {
         mSentry.setPos(spawnPosition.x, spawnPosition.y- 1, spawnPosition.z);
         player.level().addFreshEntity(mSentry);
         mPlayer = player;
+        activeSentries.put(player.getUUID(), mSentry);
         System.out.println(mSentry.position());
     }
+
+    public static boolean isCallback() {
+        return callback;
+    }
+
     public static void callbackSentry(ServerPlayer pPlayer) {
        if (mSentry != null) {
            if (!callback) {
@@ -90,6 +105,7 @@ public class SentryMode {
                     mSentry.discard();
                     mSentry.noPhysics = false;
                     mSentry.transformingToPlayer = false;
+                    activeSentries.remove(mPlayer.getUUID());
                 }
             }
             if (callback){
@@ -113,5 +129,8 @@ public class SentryMode {
                 }
             }
         }
+    }
+    public static String getAbilityName(ServerPlayer player) {
+        return hasSentry(player) ? "Recall Sentry" : "Spawn Sentry";
     }
 }

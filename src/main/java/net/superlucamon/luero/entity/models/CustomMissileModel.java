@@ -62,7 +62,7 @@ public class CustomMissileModel<T extends Entity> extends EntityModel<T> {
 
         PartDefinition cube_r6 = dres.addOrReplaceChild("cube_r6", CubeListBuilder.create().texOffs(3, 1).addBox(-0.1F, 0.4864F, -3.396F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.1F, 0.6F, -2.75F, 3.0107F, 0.0F, 0.0F));
 
-        PartDefinition quadro = main.addOrReplaceChild("quadro", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0223F, 0.6F, 3.7722F, -3.1416F, -0.0873F, 0.0F));
+        PartDefinition quadro  = main.addOrReplaceChild("quadro", CubeListBuilder.create(), PartPose.offsetAndRotation(0.0223F, 0.6F, 3.7722F, -3.1416F, -0.0873F, 0.0F));
 
         PartDefinition cube_r7 = quadro.addOrReplaceChild("cube_r7", CubeListBuilder.create().texOffs(0, 3).addBox(-0.0999F, -2.1034F, 1.5418F, 0.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.1F, 0.6F, -2.75F, -0.3927F, 0.0F, 0.0F));
 

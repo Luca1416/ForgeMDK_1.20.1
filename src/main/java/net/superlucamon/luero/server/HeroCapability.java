@@ -15,7 +15,6 @@ public class HeroCapability implements IHeroCapability {
     @Override
     public void setCurrentHero(Hero hero) {
         this.currentHero = hero;
-
     }
 
     @Override

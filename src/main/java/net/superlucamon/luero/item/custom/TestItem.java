@@ -26,6 +26,7 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.superlucamon.luero.entity.projectile.MicromissileEntity;
 import net.superlucamon.luero.test.CustomFlyingRocket;
 import net.superlucamon.luero.test.TargetedEntitySpriteRenderer;
 import org.joml.Random;
@@ -268,13 +269,13 @@ public class TestItem extends Item {
                     double x = getRandomInRange(-5, 5);
                     double y = getRandomInRange(3, 7);
                     double z = getRandomInRange(-5, 5);
-                    CustomFlyingRocket lRocket = new CustomFlyingRocket(CUSTOM_SMALL_FIREBALL.get(), mServerLevel);
+                    MicromissileEntity lRocket = new MicromissileEntity(CUSTOM_SMALL_FIREBALL.get(), mServerLevel);
                     lRocket.setTargetEntity(mLivingEntity);
                     lRocket.setPos(mPlayer.position().add(x,y,z));
 
-
                     /*lRocket.setPos(mPlayer.getPosition(1).x(), mPlayer.getEyeY(), mPlayer.getPosition(1).z());
                     mLevel.addFreshEntity(lRocket);
+
 
                      */
                     //}

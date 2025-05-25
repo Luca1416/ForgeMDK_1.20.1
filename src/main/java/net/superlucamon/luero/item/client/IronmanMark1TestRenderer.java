@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 public class IronmanMark1TestRenderer extends GeoArmorRenderer<IronmanMark1TestArmorItem> {
     private static float currentScale = 0.4f;
     private static float deltaTick = 0f;
-    private static boolean suitOn;
+    private static boolean suitOn = true;
     private static float mAlpha = 0f;
 
     public IronmanMark1TestRenderer() {

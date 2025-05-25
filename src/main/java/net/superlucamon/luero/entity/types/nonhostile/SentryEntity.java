@@ -20,7 +20,7 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.superlucamon.luero.damagesources.CustomDamageSources;
-import net.superlucamon.luero.test.CustomFlyingRocket;
+import net.superlucamon.luero.entity.projectile.MicromissileEntity;
 import net.superlucamon.luero.util.UtilMethods;
 import org.joml.Random;
 
@@ -222,18 +222,18 @@ public class SentryEntity extends PathfinderMob {
                 double x = getRandomInRange(-5, 5);
                 double y = getRandomInRange(3, 7);
                 double z = getRandomInRange(-5, 5);
-                CustomFlyingRocket lRocket = new CustomFlyingRocket(CUSTOM_SMALL_FIREBALL.get(), mLevel);
-                if (mLivingEntity.getClass() != lRocket.getClass() && mLivingEntity != null) {
+                MicromissileEntity lRocket = new MicromissileEntity(CUSTOM_SMALL_FIREBALL.get(), mLevel);
+                if (mLivingEntity != null) //add functionality for comparing Entity Class with Missile Class to avoid targeting missiles
+                    {
                     lRocket.setTargetEntity(mLivingEntity);
                     if (rightArm != null) {
                         //System.out.println(rightArm.x);
                         lRocket.setPos(rightArm.x, rightArm.y, rightArm.z);
                     }
 
-                    /*lRocket.setPos(mPlayer.getPosition(1).x(), mPlayer.getEyeY(), mPlayer.getPosition(1).z());
-                    mLevel.addFreshEntity(lRocket);
+                    lRocket.setPos(mPlayer.getPosition(1).x(), mPlayer.getEyeY(), mPlayer.getPosition(1).z());
 
-                     */
+
                     //}
                     // Initial position
                     mLevel.addFreshEntity(lRocket);

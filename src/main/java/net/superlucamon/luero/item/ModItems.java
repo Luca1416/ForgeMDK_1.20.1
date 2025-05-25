@@ -7,6 +7,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.superlucamon.luero.Main;
+import net.superlucamon.luero.item.custom.BeamItemTestv2;
 import net.superlucamon.luero.item.shitToFix.BeamItem;
 import net.superlucamon.luero.item.custom.IronmanMark1TestArmorItem;
 import net.superlucamon.luero.item.custom.TestItem;
@@ -20,6 +21,8 @@ public class ModItems {
             () -> new TestItem(new Item.Properties()));
     public static final RegistryObject<Item> BEAMITEM_TEST = ITEMS.register("test",
             () -> new BeamItem(new Item.Properties()));
+    public static final RegistryObject<Item> UNIBEAMITEM_TEST = ITEMS.register("unibeam_test",
+            () -> new BeamItemTestv2(new Item.Properties()));
     public static final RegistryObject<Item> RAW_SAPPHIRE = ITEMS.register("raw_sapphire",
             () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> REACTOR_TEST1 = ITEMS.register("reactor_test1",
