@@ -1,14 +1,16 @@
 package net.superlucamon.luero.server;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
-import net.superlucamon.luero.entity.projectile.UniBeamEntity;
+import net.superlucamon.luero.entity.renderer.ClientBeamData;
 import net.superlucamon.luero.heros.ironman.abilities.SentryMode;
 import net.superlucamon.luero.heros.keymanagement.KeyBindings;
 import net.superlucamon.luero.item.ModItems;
+import net.superlucamon.luero.networking.ModPackets;
+import net.superlucamon.luero.networking.packet.StartBeamPacket;
+import net.superlucamon.luero.networking.packet.StopBeamPacket;
 import net.superlucamon.luero.server.HeroProvider.Ability;
 import net.superlucamon.luero.server.HeroProvider.Hero;
-import net.superlucamon.luero.test.CustomEntityRegister;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -50,7 +52,7 @@ public class HeroRegistry {
                 this.bind(KeyBindings.ABILITYKEY_3, getAbilities().get(2), player -> {
                     uniBeam = !uniBeam;
                     if (uniBeam) {
-                        Vec3 look = player.getLookAngle(); // normalized direction
+                        /*Vec3 look = player.getLookAngle(); // normalized direction
                         Vec3 origin = player.position().add(0, 1.3, 0); // chest height
 
                         UniBeamEntity beam = new UniBeamEntity(CustomEntityRegister.CUSTOM_BEAM.get(), player.level());
@@ -60,6 +62,17 @@ public class HeroRegistry {
                         beam.setYRot((float) (Math.toDegrees(Math.atan2(look.z, look.x)) - 90));
                         beam.setXRot((float) (-Math.toDegrees(Math.asin(look.y))));
                         player.level().addFreshEntity(beam);
+                         */
+                        if (KeyBindings.ABILITYKEY_3.isDown()) {
+                            if (!ClientBeamData.isFiring(Minecraft.getInstance().player.getUUID())) {
+                                ModPackets.sendToServer(new StartBeamPacket());
+                            }
+                        } else {
+                            if (ClientBeamData.isFiring(Minecraft.getInstance().player.getUUID())) {
+                                ModPackets.sendToServer(new StopBeamPacket());
+                            }
+                        }
+
                     }
                 });
                 this.bind(KeyBindings.ABILITYKEY_4, getAbilities().get(3), player -> {

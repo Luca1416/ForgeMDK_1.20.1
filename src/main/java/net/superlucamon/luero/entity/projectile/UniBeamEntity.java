@@ -20,9 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import net.superlucamon.luero.register.ModSounds;
 
-import java.util.Optional;
-import java.util.UUID;
-
 public class UniBeamEntity extends Entity {
     private int ticksExisted = 0;
     private Player owner;
@@ -33,8 +30,11 @@ public class UniBeamEntity extends Entity {
     private boolean enableFirePlacement = true;
     private float beamProgress = 0f;
     private boolean firstPersonView = false;
-    private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID =
-            SynchedEntityData.defineId(UniBeamEntity.class, EntityDataSerializers.OPTIONAL_UUID);
+
+    private static final EntityDataAccessor<Float> Y_ROT = SynchedEntityData.defineId(UniBeamEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> X_ROT = SynchedEntityData.defineId(UniBeamEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> BEAM_PROGRESS = SynchedEntityData.defineId(UniBeamEntity.class, EntityDataSerializers.FLOAT);
+
 
 
 
@@ -46,10 +46,6 @@ public class UniBeamEntity extends Entity {
 
     public void setPlayer(Player player) {
         this.owner = player;
-        this.entityData.set(OWNER_UUID, Optional.of(player.getUUID()));
-    }
-    public UUID getOwnerUUID() {
-        return this.entityData.get(OWNER_UUID).orElse(null);
     }
 
 
@@ -95,7 +91,19 @@ public class UniBeamEntity extends Entity {
                     Vec3 backOffset = owner.getLookAngle().scale(0.5);
                     beamPos = beamPos.subtract(backOffset);
                 }
-            this.setPos(beamPos.x, beamPos.y - 0.5f, beamPos.z);
+            if (!level().isClientSide) {
+                this.entityData.set(Y_ROT, this.getYRot());
+                this.entityData.set(X_ROT, this.getXRot());
+                this.entityData.set(BEAM_PROGRESS, this.beamProgress);
+            }
+            float yRot = this.getEntityData().get(Y_ROT);
+            float xRot = this.getEntityData().get(X_ROT);
+            float progress = this.getEntityData().get(BEAM_PROGRESS);
+
+            this.moveTo(beamPos.x, beamPos.y - 0.5f, beamPos.z);
+            this.lerpMotion(beamPos.x, beamPos.y - 0.5f, beamPos.z);
+            this.hasImpulse = true;
+            this.markHurt();
 
             this.setYRot(owner.getYRot());
             this.setXRot(owner.getXRot());
@@ -207,8 +215,11 @@ public class UniBeamEntity extends Entity {
     }
     @Override
     protected void defineSynchedData() {
-        this.entityData.define(OWNER_UUID, Optional.empty());
+        this.entityData.define(Y_ROT, 0f);
+        this.entityData.define(X_ROT, 0f);
+        this.entityData.define(BEAM_PROGRESS, 0f);
     }
+
 
 
     @Override

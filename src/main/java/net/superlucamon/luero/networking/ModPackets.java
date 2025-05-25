@@ -1,6 +1,7 @@
 package net.superlucamon.luero.networking;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -8,8 +9,7 @@ import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.superlucamon.luero.Main;
 import net.superlucamon.luero.heros.keymanagement.AbilityKeyPressPacket;
-import net.superlucamon.luero.networking.packet.ExampleC2SPacket;
-import net.superlucamon.luero.networking.packet.RenderAbilitiesSyncS2Packet;
+import net.superlucamon.luero.networking.packet.*;
 
 public class ModPackets {
     private static SimpleChannel INSTANCE;
@@ -46,6 +46,14 @@ public class ModPackets {
                 AbilityKeyPressPacket::encode,
                 AbilityKeyPressPacket::decode,
                 AbilityKeyPressPacket::handle);
+        net.registerMessage(packetId++,
+                StartBeamPacket.class,
+                StartBeamPacket::encode,
+                StartBeamPacket::new,
+                StartBeamPacket::handle);
+        net.registerMessage(packetId++, StopBeamPacket.class, StopBeamPacket::encode, StopBeamPacket::new, StopBeamPacket::handle);
+        net.registerMessage(packetId++, ClientOnlyStopBeamPacket.class, ClientOnlyStopBeamPacket::encode, ClientOnlyStopBeamPacket::new, ClientOnlyStopBeamPacket::handle);
+
     }
 
     public static <MSG> void sendToServer(MSG message) {
@@ -54,6 +62,12 @@ public class ModPackets {
 
     public static <MSG> void sendToPlayer(MSG message, ServerPlayer player) {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
+    }
+    public static <MSG> void sendToClientsTracking(ServerPlayer player, MSG message) {
+        if (player.level() instanceof ServerLevel serverLevel) {
+            serverLevel.getChunkSource().chunkMap.getPlayers(player.chunkPosition(), false)
+                    .forEach(p -> INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) p), message));
+        }
     }
 
 }

@@ -1,14 +1,17 @@
 package net.superlucamon.luero;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -25,6 +28,7 @@ import net.superlucamon.luero.block.ModBlocks;
 import net.superlucamon.luero.block.entity.ModBlockEntities;
 import net.superlucamon.luero.block.recipe.ModRecipes;
 import net.superlucamon.luero.client.command.HeroCommand;
+import net.superlucamon.luero.entity.renderer.ClientBeamRenderer;
 import net.superlucamon.luero.entity.renderer.CustomLineRenderer;
 import net.superlucamon.luero.entity.renderer.SentryEntityRenderer;
 import net.superlucamon.luero.entity.renderer.UniBeamRenderer;
@@ -140,6 +144,14 @@ public class Main
                     Minecraft.getInstance().getEntityModels(),
                     Minecraft.getInstance().font
             );
+            MinecraftForge.EVENT_BUS.addListener((RenderLevelStageEvent renderEvent) -> {
+                if (renderEvent.getStage() == RenderLevelStageEvent.Stage.AFTER_ENTITIES) {
+                    PoseStack poseStack = renderEvent.getPoseStack();
+                    MultiBufferSource.BufferSource buffer = Minecraft.getInstance().renderBuffers().bufferSource();
+                    ClientBeamRenderer.render(poseStack, buffer, renderEvent.getPartialTick(), 15.0); // beam length
+                    buffer.endBatch();
+                }
+            });
             MenuScreens.register(ModMenuTypes.GEM_POLISHING_MENU.get(), GemPolishingStationScreen::new);
 
         }
