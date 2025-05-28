@@ -7,10 +7,13 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.common.Mod;
 import net.superlucamon.luero.entity.types.nonhostile.SentryEntity;
 import net.superlucamon.luero.entity.models.CustomSentryModel;
 import org.jetbrains.annotations.Nullable;
 
+@Mod.EventBusSubscriber(modid = "heromod", value = Dist.CLIENT)
 public class SentryEntityRenderer extends LivingEntityRenderer<SentryEntity, CustomSentryModel<SentryEntity>> {
     private static final ResourceLocation SKIN = new ResourceLocation("heromod", "textures/entity/ironman_skin.png");
     private static final ResourceLocation SKINv2 = new ResourceLocation("heromod", "textures/entity/ironman_skinv2.png");

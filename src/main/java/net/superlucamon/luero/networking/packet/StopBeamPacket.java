@@ -3,22 +3,36 @@ package net.superlucamon.luero.networking.packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
-import net.superlucamon.luero.networking.ModPackets;
+import net.superlucamon.luero.entity.renderer.ClientBeamData;
+import net.superlucamon.luero.heros.ironman.otherstuff.BeamTracking;
 
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class StopBeamPacket {
-    public StopBeamPacket() {}
+    private final UUID uuid;
 
-    public StopBeamPacket(FriendlyByteBuf buf) {}
+    public StopBeamPacket(UUID uuid) {
+        this.uuid = uuid;
+    }
 
-    public void encode(FriendlyByteBuf buf) {}
+    public StopBeamPacket(FriendlyByteBuf buf) {
+        this.uuid = buf.readUUID();
+    }
+
+    public void encode(FriendlyByteBuf buf) {
+        buf.writeUUID(uuid);
+    }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player != null) {
-                ModPackets.sendToClientsTracking(player, new ClientOnlyStopBeamPacket(player.getUUID()));
+            if (ctx.get().getDirection().getReceptionSide().isServer()) {
+                ServerPlayer sender = ctx.get().getSender();
+                if (sender != null) {
+                    BeamTracking.stopBeam(sender);
+                }
+            } else {
+                ClientBeamData.stopFiring(uuid);
             }
         });
         ctx.get().setPacketHandled(true);

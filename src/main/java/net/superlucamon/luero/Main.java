@@ -77,7 +77,6 @@ public class Main
         modEventBus.addListener(this::addCreative);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
-
     @SubscribeEvent
     public void onRegisterCommands(RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
@@ -88,6 +87,8 @@ public class Main
             HeroRegistry.initializeHeroes();
         });
         ModPackets.register();
+
+
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
@@ -106,6 +107,7 @@ public class Main
             event.enqueueWork(() -> {
                 //EntityRenderers.register(CUSTOM_SMALL_FIREBALL.get(), CustomMissileRenderer::new);
                 EntityRenderers.register(TARGET_MARKER.get(), TargetMarkerEntityRenderer::new);
+
                 EntityRenderers.register(CUSTOM_LINE.get(), CustomLineRenderer::new);
                 EntityRenderers.register(CUSTOM_BEAM.get(), UniBeamRenderer::new);
                 EntityRenderers.register(SENTRY_ENTITY.get(), SentryEntityRenderer::new);
@@ -153,8 +155,6 @@ public class Main
                 }
             });
             MenuScreens.register(ModMenuTypes.GEM_POLISHING_MENU.get(), GemPolishingStationScreen::new);
-
         }
-
     }
 }

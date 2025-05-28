@@ -7,14 +7,14 @@ import net.superlucamon.luero.entity.renderer.ClientBeamData;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class ClientOnlyStopBeamPacket {
+public class ClientOnlyStartBeamPacket {
     private final UUID playerId;
 
-    public ClientOnlyStopBeamPacket(UUID id) {
+    public ClientOnlyStartBeamPacket(UUID id) {
         this.playerId = id;
     }
 
-    public ClientOnlyStopBeamPacket(FriendlyByteBuf buf) {
+    public ClientOnlyStartBeamPacket(FriendlyByteBuf buf) {
         this.playerId = buf.readUUID();
     }
 
@@ -23,7 +23,7 @@ public class ClientOnlyStopBeamPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> ClientBeamData.stop(playerId));
+        ctx.get().enqueueWork(() -> ClientBeamData.start(playerId));
         ctx.get().setPacketHandled(true);
     }
 }

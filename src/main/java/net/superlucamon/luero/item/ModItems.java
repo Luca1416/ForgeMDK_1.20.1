@@ -8,17 +8,16 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.superlucamon.luero.Main;
 import net.superlucamon.luero.item.custom.BeamItemTestv2;
-import net.superlucamon.luero.item.shitToFix.BeamItem;
 import net.superlucamon.luero.item.custom.IronmanMark1TestArmorItem;
-import net.superlucamon.luero.item.custom.TestItem;
 import net.superlucamon.luero.item.custom.ReactorTest;
+import net.superlucamon.luero.item.shitToFix.BeamItem;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, Main.MOD_ID);
 
     public static final RegistryObject<Item> SAPPHIRE = ITEMS.register("sapphire",
-            () -> new TestItem(new Item.Properties()));
+            () -> new BeamItem(new Item.Properties()));
     public static final RegistryObject<Item> BEAMITEM_TEST = ITEMS.register("test",
             () -> new BeamItem(new Item.Properties()));
     public static final RegistryObject<Item> UNIBEAMITEM_TEST = ITEMS.register("unibeam_test",

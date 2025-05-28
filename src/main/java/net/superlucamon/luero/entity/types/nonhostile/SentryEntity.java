@@ -16,9 +16,11 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.superlucamon.luero.Main;
 import net.superlucamon.luero.damagesources.CustomDamageSources;
 import net.superlucamon.luero.entity.projectile.MicromissileEntity;
 import net.superlucamon.luero.util.UtilMethods;
@@ -242,18 +244,19 @@ public class SentryEntity extends PathfinderMob {
             });
         }
     }
-    @SubscribeEvent
-    public static void getModelData(RenderLivingEvent.Pre event) {
-        LivingEntity entity = event.getEntity();
-        if (mSentry != null) {
-            if (entity == mSentry) {
-                LivingEntityRenderer renderer = (LivingEntityRenderer) event.getRenderer();
-                HumanoidModel<?> entityModel = (HumanoidModel<?>) renderer.getModel();
-                rightArm = entityModel.rightArm;
-               // System.out.println(entity);
+    @Mod.EventBusSubscriber(modid = Main.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+    public class SentryRenderHandler {
+        @SubscribeEvent
+        public static void onPreRender(RenderLivingEvent.Pre<?, ?> event) {
+            if (event.getEntity() instanceof SentryEntity) {
+                LivingEntityRenderer<?, ?> renderer = (LivingEntityRenderer<?, ?>) event.getRenderer();
+                HumanoidModel<?> model = (HumanoidModel<?>) renderer.getModel();
+                rightArm = model.rightArm;
+                // ... do stuff ...
             }
         }
     }
+
     private static Vec3 getRightHandPosition(Entity player) {
         float f = player.getYRot() * ((float)Math.PI / 180F);
         float f1 = player.getXRot() * ((float)Math.PI / 180F);

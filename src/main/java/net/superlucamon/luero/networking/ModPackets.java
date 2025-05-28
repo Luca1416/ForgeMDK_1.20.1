@@ -1,7 +1,6 @@
 package net.superlucamon.luero.networking;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
@@ -52,7 +51,7 @@ public class ModPackets {
                 StartBeamPacket::new,
                 StartBeamPacket::handle);
         net.registerMessage(packetId++, StopBeamPacket.class, StopBeamPacket::encode, StopBeamPacket::new, StopBeamPacket::handle);
-        net.registerMessage(packetId++, ClientOnlyStopBeamPacket.class, ClientOnlyStopBeamPacket::encode, ClientOnlyStopBeamPacket::new, ClientOnlyStopBeamPacket::handle);
+        //net.registerMessage(packetId++, ClientOnlyStopBeamPacket.class, ClientOnlyStopBeamPacket::encode, ClientOnlyStopBeamPacket::new, ClientOnlyStopBeamPacket::handle);
 
     }
 
@@ -63,11 +62,14 @@ public class ModPackets {
     public static <MSG> void sendToPlayer(MSG message, ServerPlayer player) {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
     }
-    public static <MSG> void sendToClientsTracking(ServerPlayer player, MSG message) {
-        if (player.level() instanceof ServerLevel serverLevel) {
-            serverLevel.getChunkSource().chunkMap.getPlayers(player.chunkPosition(), false)
-                    .forEach(p -> INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) p), message));
-        }
+    public static void sendToTracking(ServerPlayer player, Object msg) {
+        player.level().players().forEach(other -> {
+            if (other != player && player.distanceToSqr(other) < 128 * 128) {
+                INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) other), msg);
+            }
+        });
     }
+
+
 
 }

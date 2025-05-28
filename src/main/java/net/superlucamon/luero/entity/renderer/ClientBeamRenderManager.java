@@ -8,11 +8,14 @@ import net.minecraft.client.renderer.blockentity.BeaconRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@Mod.EventBusSubscriber(modid = "heromod", value = Dist.CLIENT)
 public class ClientBeamRenderManager {
     private static final Map<UUID, BeamRenderData> ACTIVE_BEAMS = new HashMap<>();
     private static final ResourceLocation TEXTURE = new ResourceLocation("heromod", "textures/entity/uni_beam.png");

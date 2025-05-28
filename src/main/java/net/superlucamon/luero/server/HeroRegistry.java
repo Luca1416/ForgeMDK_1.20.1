@@ -1,10 +1,8 @@
 package net.superlucamon.luero.server;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;
-import net.superlucamon.luero.entity.renderer.ClientBeamData;
 import net.superlucamon.luero.heros.ironman.abilities.SentryMode;
-import net.superlucamon.luero.heros.keymanagement.KeyBindings;
+import net.superlucamon.luero.heros.ironman.otherstuff.BeamTracking;
 import net.superlucamon.luero.item.ModItems;
 import net.superlucamon.luero.networking.ModPackets;
 import net.superlucamon.luero.networking.packet.StartBeamPacket;
@@ -32,13 +30,12 @@ public class HeroRegistry {
                 new Ability("Unibeam", "Shoots a unibeam out your chest"),
                 new Ability("Repulsor", "Shoots a repulsor out of right hand"))) {
             private boolean uniBeam;
-            @Override
             public void init() {
-                this.bind(KeyBindings.ABILITYKEY_1, getAbilities().get(0), player -> {
+                this.bind(0, getAbilities().get(0), player -> {
                     // TODO: Implement Missile ability
                     System.out.println("IronMan: Missile");
                 });
-                this.bind(KeyBindings.ABILITYKEY_2, getAbilities().get(1), player -> {
+                this.bind(1, getAbilities().get(1), player -> {
                     if (!SentryMode.hasSentry(player))
                     {
                         SentryMode.spawnSentry(player);
@@ -49,7 +46,7 @@ public class HeroRegistry {
                     }
                     System.out.println("IronMan: SentryMode");
                 });
-                this.bind(KeyBindings.ABILITYKEY_3, getAbilities().get(2), player -> {
+                this.bind(2, getAbilities().get(2), player -> {
                     uniBeam = !uniBeam;
                     if (uniBeam) {
                         /*Vec3 look = player.getLookAngle(); // normalized direction
@@ -62,20 +59,17 @@ public class HeroRegistry {
                         beam.setYRot((float) (Math.toDegrees(Math.atan2(look.z, look.x)) - 90));
                         beam.setXRot((float) (-Math.toDegrees(Math.asin(look.y))));
                         player.level().addFreshEntity(beam);
-                         */
-                        if (KeyBindings.ABILITYKEY_3.isDown()) {
-                            if (!ClientBeamData.isFiring(Minecraft.getInstance().player.getUUID())) {
-                                ModPackets.sendToServer(new StartBeamPacket());
-                            }
-                        } else {
-                            if (ClientBeamData.isFiring(Minecraft.getInstance().player.getUUID())) {
-                                ModPackets.sendToServer(new StopBeamPacket());
-                            }
+                        */
+                        if (!BeamTracking.isFiring(player.getUUID())) {
+                            ModPackets.sendToServer(new StartBeamPacket(player.getUUID()));
                         }
-
+                    } else {
+                        if (BeamTracking.isFiring(player.getUUID())) {
+                            ModPackets.sendToServer(new StopBeamPacket(player.getUUID()));
+                        }
                     }
                 });
-                this.bind(KeyBindings.ABILITYKEY_4, getAbilities().get(3), player -> {
+                this.bind(3, getAbilities().get(3), player -> {
                     // TODO: Implement Repulsor
                     System.out.println("IronMan: Repulsor");
                 });

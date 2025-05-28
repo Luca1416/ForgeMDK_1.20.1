@@ -2,7 +2,6 @@ package net.superlucamon.luero.item.custom;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -28,7 +27,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.superlucamon.luero.entity.projectile.MicromissileEntity;
 import net.superlucamon.luero.test.CustomFlyingRocket;
-import net.superlucamon.luero.test.TargetedEntitySpriteRenderer;
 import org.joml.Random;
 import org.lwjgl.glfw.GLFW;
 
@@ -54,7 +52,7 @@ public class TestItem extends Item {
     //private static Level mLevel;
     //private static LivingEntity mEntity;
     private static final ResourceLocation SPRITE_TEXTURE = new ResourceLocation("heromod", "textures/item/strawberry.png");
-    private static EntityRendererProvider.Context rendererContext;
+  //  private static EntityRendererProvider.Context rendererContext;
     public static Set<LivingEntity> map = new HashSet<>();
     public static final ConcurrentHashMap<LivingEntity, Integer> renderDataMap = new ConcurrentHashMap<>();
     public static int pRocketCountToGet;
@@ -72,7 +70,7 @@ public class TestItem extends Item {
 
         mPlayer = pPlayer;
 
-        if (rendererContext == null) {
+        /*if (rendererContext == null) {
             renderDataMap.clear();
             rendererContext = new EntityRendererProvider.Context(
                     Minecraft.getInstance().getEntityRenderDispatcher(),
@@ -83,6 +81,8 @@ public class TestItem extends Item {
                     Minecraft.getInstance().getEntityModels(),
                     Minecraft.getInstance().font);
         }
+
+         */
 
         if (!pLevel.isClientSide()) {
             renderDataMap.forEach((livingEntity, rocketsToGet) -> {
@@ -120,7 +120,7 @@ public class TestItem extends Item {
             addRenderData(lEntity, 1);
         }
 
-        if (player != null && rendererContext != null && !Minecraft.getInstance().isPaused()) {
+        /*if (player != null && rendererContext != null && !Minecraft.getInstance().isPaused()) {
             renderDataMap.forEach((livingEntity, rocketsToGet) -> {
                 if (livingEntity.isAlive() && event.getEntity() == livingEntity) {
                     TargetedEntitySpriteRenderer renderer = TargetedEntitySpriteRenderer.getInstance(rendererContext);
@@ -130,6 +130,8 @@ public class TestItem extends Item {
                 }
             });
         }
+
+         */
     }
 
 

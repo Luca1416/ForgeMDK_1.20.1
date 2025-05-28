@@ -6,10 +6,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.common.Mod;
+import net.superlucamon.luero.heros.ironman.otherstuff.BeamTracking;
 
+@Mod.EventBusSubscriber(modid = "heromod", value = Dist.CLIENT)
 public class ClientBeamRenderer {
     private static final ResourceLocation BEAM_TEXTURE = new ResourceLocation("heromod", "textures/entity/uni_beam.png");
 
@@ -17,7 +22,7 @@ public class ClientBeamRenderer {
         Minecraft mc = Minecraft.getInstance();
 
         for (Player player : mc.level.players()) {
-            if (!ClientBeamData.isFiring(player.getUUID())) continue;
+            if (!BeamTracking.isFiring(player.getUUID())) continue;
 
             Vec3 eyePos = player.getEyePosition(partialTicks);
             Vec3 viewVec = player.getViewVector(partialTicks);
@@ -35,7 +40,7 @@ public class ClientBeamRenderer {
             float atan2XZ = (float) Math.atan2(direction.z, direction.x);
 
             matrixStack.pushPose();
-            matrixStack.translate(0.0, player.getEyeHeight(player.getPose()) - 2.0, 0.0);
+            matrixStack.translate(0.0, player.getEyeHeight(Pose.STANDING) - 2.0, 0.0);
             matrixStack.mulPose(Axis.YP.rotationDegrees((float) Math.toDegrees(1.5707964f - atan2XZ)));
             matrixStack.mulPose(Axis.XP.rotationDegrees((float) Math.toDegrees(acosY)));
 

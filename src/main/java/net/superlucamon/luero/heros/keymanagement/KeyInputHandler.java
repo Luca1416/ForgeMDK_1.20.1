@@ -1,13 +1,12 @@
 package net.superlucamon.luero.heros.keymanagement;
 
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.superlucamon.luero.Main;
 import net.superlucamon.luero.networking.ModPackets;
 
-@Mod.EventBusSubscriber(modid = Main.MOD_ID, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = Main.MOD_ID)
 public class KeyInputHandler {
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {

@@ -13,10 +13,13 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.common.Mod;
 import net.superlucamon.luero.entity.projectile.UniBeamEntity;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
+@Mod.EventBusSubscriber(modid = "heromod", value = Dist.CLIENT)
 public class UniBeamRenderer<T extends Entity> extends EntityRenderer<T> {
     public static final ResourceLocation BEAM_TEXTURE = new ResourceLocation("heromod", "textures/entity/uni_beam.png");
 

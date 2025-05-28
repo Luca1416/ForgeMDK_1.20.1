@@ -3,6 +3,7 @@ package net.superlucamon.luero.heros.keymanagement;
 import net.minecraft.client.KeyMapping;
 import net.minecraftforge.client.settings.KeyModifier;
 
+
 public enum KeyBindingValues {
     ABILITYKEY_1(KeyBindings.ABILITYKEY_1),
     ABILITYKEY_2(KeyBindings.ABILITYKEY_2),

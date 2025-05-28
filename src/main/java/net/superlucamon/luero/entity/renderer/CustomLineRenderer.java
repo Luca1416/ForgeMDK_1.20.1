@@ -13,10 +13,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.common.Mod;
 import net.superlucamon.luero.test.MyRenderTypes;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
+@Mod.EventBusSubscriber(modid = "heromod", value = Dist.CLIENT)
 public class CustomLineRenderer<T extends Entity> extends EntityRenderer {
 
 

@@ -5,6 +5,8 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.superlucamon.luero.Main;
 import net.superlucamon.luero.heros.keymanagement.KeyBindingValues;
@@ -14,6 +16,7 @@ import java.awt.*;
 
 public class HeroAbilities {
 private static final ResourceLocation test = new ResourceLocation(Main.MOD_ID, "textures/ironmanabilities/ability_test.png");
+    @OnlyIn(Dist.CLIENT)
     public static final IGuiOverlay IRONMAN_ABILITIES_HUD = (((gui, guiGraphics, partialTick, screenWidth, screenHeight) -> {
         Player player = Minecraft.getInstance().player;
         if (player != null && ClientHeroData.getPlayerHero() != null) {
@@ -29,6 +32,7 @@ private static final ResourceLocation test = new ResourceLocation(Main.MOD_ID, "
             }
         }
     }));
+    @OnlyIn(Dist.CLIENT)
     public static void drawAbilities(GuiGraphics guiGraphics, String keyValue, String abilityName, int x, int y, int boxSize, int boxColor, int textColorAbilityName, int textColorKeyName) {
         Font font = Minecraft.getInstance().font;
 
