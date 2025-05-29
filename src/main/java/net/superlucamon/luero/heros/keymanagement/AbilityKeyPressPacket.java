@@ -31,7 +31,7 @@ public class AbilityKeyPressPacket {
                 var bindings = hero.getBindings().entrySet().stream().toList();
                 if (packet.keyIndex >= 0 && packet.keyIndex < bindings.size()) {
                     var handler = bindings.get(packet.keyIndex).getValue();
-                    handler.trigger(player);
+                    handler.handle(player);
                 }
             }
         });

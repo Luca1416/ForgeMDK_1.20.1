@@ -7,6 +7,7 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.superlucamon.luero.Main;
+import net.superlucamon.luero.client.BeamRenderC2SPacket;
 import net.superlucamon.luero.heros.keymanagement.AbilityKeyPressPacket;
 import net.superlucamon.luero.networking.packet.*;
 
@@ -40,6 +41,16 @@ public class ModPackets {
                 .encoder(RenderAbilitiesSyncS2Packet::toBytes)
                 .consumerMainThread(RenderAbilitiesSyncS2Packet::handle)
                 .add();
+        net.messageBuilder(BeamRenderS2CPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                        .decoder(BeamRenderS2CPacket::new)
+                                .encoder(BeamRenderS2CPacket::encode)
+                                    .consumerMainThread(BeamRenderS2CPacket::handle)
+                                            .add();
+        net.messageBuilder(BeamRenderC2SPacket.class, id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(BeamRenderC2SPacket::new)
+                .encoder(BeamRenderC2SPacket::encode)
+                .consumerMainThread(BeamRenderC2SPacket::handle)
+                .add();
         net.registerMessage(packetId++,
                 AbilityKeyPressPacket.class,
                 AbilityKeyPressPacket::encode,
@@ -51,6 +62,9 @@ public class ModPackets {
                 StartBeamPacket::new,
                 StartBeamPacket::handle);
         net.registerMessage(packetId++, StopBeamPacket.class, StopBeamPacket::encode, StopBeamPacket::new, StopBeamPacket::handle);
+        net.registerMessage(packetId++, BeamStartS2CPacket.class, BeamStartS2CPacket::encode, BeamStartS2CPacket::new, BeamStartS2CPacket::handle);
+        net.registerMessage(packetId++, BeamStopS2CPacket.class, BeamStopS2CPacket::encode, BeamStopS2CPacket::new, BeamStopS2CPacket::handle);
+
         //net.registerMessage(packetId++, ClientOnlyStopBeamPacket.class, ClientOnlyStopBeamPacket::encode, ClientOnlyStopBeamPacket::new, ClientOnlyStopBeamPacket::handle);
 
     }
@@ -68,6 +82,10 @@ public class ModPackets {
                 INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) other), msg);
             }
         });
+    }
+    public static void sendToAllTrackingAndSelf(Object packet, ServerPlayer player) {
+        // Send to all players tracking the entity, AND to the entity themself.
+        INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player), packet);
     }
 
 

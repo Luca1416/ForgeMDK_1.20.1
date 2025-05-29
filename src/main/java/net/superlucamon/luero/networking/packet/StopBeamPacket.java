@@ -3,7 +3,6 @@ package net.superlucamon.luero.networking.packet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
-import net.superlucamon.luero.entity.renderer.ClientBeamData;
 import net.superlucamon.luero.heros.ironman.otherstuff.BeamTracking;
 
 import java.util.UUID;
@@ -32,7 +31,7 @@ public class StopBeamPacket {
                     BeamTracking.stopBeam(sender);
                 }
             } else {
-                ClientBeamData.stopFiring(uuid);
+                //ClientBeamData.stopFiring(uuid);
             }
         });
         ctx.get().setPacketHandled(true);

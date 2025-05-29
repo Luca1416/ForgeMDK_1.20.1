@@ -1,12 +1,13 @@
 package net.superlucamon.luero.server;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.superlucamon.luero.heros.ironman.abilities.SentryMode;
 import net.superlucamon.luero.heros.ironman.otherstuff.BeamTracking;
 import net.superlucamon.luero.item.ModItems;
 import net.superlucamon.luero.networking.ModPackets;
-import net.superlucamon.luero.networking.packet.StartBeamPacket;
-import net.superlucamon.luero.networking.packet.StopBeamPacket;
+import net.superlucamon.luero.networking.packet.BeamRenderS2CPacket;
 import net.superlucamon.luero.server.HeroProvider.Ability;
 import net.superlucamon.luero.server.HeroProvider.Hero;
 
@@ -60,12 +61,21 @@ public class HeroRegistry {
                         beam.setXRot((float) (-Math.toDegrees(Math.asin(look.y))));
                         player.level().addFreshEntity(beam);
                         */
-                        if (!BeamTracking.isFiring(player.getUUID())) {
-                            ModPackets.sendToServer(new StartBeamPacket(player.getUUID()));
+                        if (isOnCooldown(2, player, 2000))
+                        {
+                            player.displayClientMessage(Component.literal("Ability is on cooldown"), true);
+                            return;
                         }
-                    } else {
-                        if (BeamTracking.isFiring(player.getUUID())) {
-                            ModPackets.sendToServer(new StopBeamPacket(player.getUUID()));
+                        player.displayClientMessage(Component.literal("Doing stuff"), true);
+                        if (!BeamTracking.isFiring(player.getUUID())) {
+                            BeamTracking.startBeam(player);
+                            ModPackets.sendToAllTrackingAndSelf(new BeamRenderS2CPacket(player.getUUID(), player.getEyePosition(0), player.getLookAngle(), true), (ServerPlayer)player);
+                        }
+                        else {
+                            if (BeamTracking.isFiring(player.getUUID())) {
+                                BeamTracking.stopBeam(player);
+                                ModPackets.sendToAllTrackingAndSelf(new BeamRenderS2CPacket(player.getUUID(), player.getEyePosition(0), player.getLookAngle(), false), player);
+                            }
                         }
                     }
                 });
@@ -73,8 +83,8 @@ public class HeroRegistry {
                     // TODO: Implement Repulsor
                     System.out.println("IronMan: Repulsor");
                 });
-            }
 
+            }
 
             @Override
             public ItemStack[] getArmorSet() {
